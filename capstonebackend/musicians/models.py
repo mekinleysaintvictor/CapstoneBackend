@@ -11,5 +11,3 @@ class Musician(models.Model):
     #influences/fk, band/fk
     #influences - artist, genre, band pic
     #band - bandname, members, bandSInce
-    def __str__(self):
-        return self.name
