@@ -14,6 +14,7 @@ class Musician(models.Model):
         influences = models.CharField(max_length=100, default='None')
         genres = models.CharField(max_length=100, default='None')
         # slug = AutoSlugField(populate_from='user', default='None')
+        video = models.CharField(max_length=100, default='None')
         friends = models.ManyToManyField("Musician", blank=True)
 
         def __str__(self):
