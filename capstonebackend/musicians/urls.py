@@ -3,5 +3,6 @@ from musicians import views
 
 urlpatterns = [
     path('all/', views.get_all_musicians),
-    path('', views.user_musicians)
+    path('user/', views.get_one_musician),
+    path('', views.user_profiles),
 ]

@@ -13,14 +13,14 @@ class Musician(models.Model):
         instruments = models.CharField(max_length=100, default='None')
         influences = models.CharField(max_length=100, default='None')
         genres = models.CharField(max_length=100, default='None')
-        slug = AutoSlugField(populate_from='user', default='None')
+        # slug = AutoSlugField(populate_from='user', default='None')
         friends = models.ManyToManyField("Musician", blank=True)
 
         def __str__(self):
             return str(self.user.username)
 
-        def get_absolute_url(self):
-            return "/users/{}".format(self.slug)
+        # def get_absolute_url(self):
+        #     return "/users/{}".format(self.slug)
 
 def post_save_user_model_receiver(sender, instance, created, *args, **kwargs):
     if created:
