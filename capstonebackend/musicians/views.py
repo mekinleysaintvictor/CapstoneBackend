@@ -36,6 +36,14 @@ def get_one_musician(request):
     serializer = RegistrationSerializer(user, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_details(request, pk):
+    profile = Musician.objects.filter(pk=pk)
+    serializer = MusicianSerializer(profile, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 @api_view(['POST', 'PUT', 'GET'])
 @permission_classes([IsAuthenticated])
 def user_profiles(request):
@@ -48,13 +56,13 @@ def user_profiles(request):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    # elif request.method == 'PUT':
-    #     profile = Musician.objects.get(user_id=request.user.id)
-    #     serializer = MusicianSerializer(profile, user_id=request.user.id)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PUT':
+        profile = Musician.objects.get(user_id=request.user.id)
+        serializer = MusicianSerializer(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'GET':
         musicians = Musician.objects.filter(user_id=request.user.id)
         serializer = MusicianSerializer(musicians, many=True)
