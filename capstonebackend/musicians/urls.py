@@ -7,5 +7,6 @@ urlpatterns = [
     path('<int:pk>/', views.get_details),
     path('<int:pk>/', views.get_one_other_musician),
     path('<int:pk>/friend/', views.friend_request),
+    path('<int:pk>/deleterequest/', views.delete_request),
     path('', views.user_profiles),
 ]

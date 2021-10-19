@@ -87,21 +87,20 @@ def friend_request(request, pk):
 
 
 @api_view(['DELETE'])
-@permission_classes([AllowAny])
-def delete_request(request, operation, pk):
+@permission_classes([IsAuthenticated])
+def delete_request(request, pk):
     client1 = User.objects.get(id=pk)
-    print(client1)
-    if operation == 'Sender_deleting':
+    if request.method == 'DELETE':
         model1 = BandRequest.objects.get(sender=request.user, receiver=client1)
         serializer = BandRequestSerializer(model1, data=request)
         model1.delete()
-    elif operation == 'Receiver_deleting':
+    elif request.method == 'DELETE':
         model2 = BandRequest.objects.get(sender=client1, receiver=request.user)
         serializer = BandRequestSerializer(model2, data=request)
         model2.delete()
-        return Response(serializer.data)
+        return Response(status=status.HTTP_200_OK)
 
-    return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
