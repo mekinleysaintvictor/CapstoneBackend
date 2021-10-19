@@ -104,18 +104,27 @@ def delete_request(request, pk):
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def add_or_remove_friend(request, operation, pk):
     new_friend = User.objects.get(id=pk)
     if operation == 'add':
-        fq = BandRequest.objects.get(sender=new_friend, receiver=request.user)
+        fq = FriendRequest.objects.get(sender=new_friend, receiver=request.user)
         Friends1.make_friend(request.user, new_friend)
         Friends1.make_friend(new_friend, request.user)
         fq.delete()
     elif operation == 'remove':
         Friends1.lose_friend(request.user, new_friend)
         Friends1.lose_friend(new_friend, request.user)
-
     
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-    return redirect('form4')
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_friend(request,  pk):
+    new_friend = User.objects.get(id=pk)   
+    fq = BandRequest.objects.get(sender=new_friend, receiver=request.user)
+    Friends1.make_friend(request.user, new_friend)
+    Friends1.make_friend(new_friend, request.user)
+    fq.delete()
+    
+    return Response(status=status.HTTP_200_OK)
